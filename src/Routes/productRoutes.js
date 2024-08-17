@@ -1,53 +1,8 @@
 
-// const express = require('express');
-// const router = express.Router();
-// const Product = require('../Models/Product');
 
-// // Get products with pagination, searching, filtering, and sorting
-// router.get("/products", async (req, res) => {
-//     const { page = 1, limit = 10, search = "", category, minPrice, maxPrice, sort } = req.query;
-  
-//     const filter = {};
-  
-//     if (search) {
-//       filter.productName = { $regex: search, $options: "i" };
-//     }
-//     if (category) {
-//       filter.category = category;
-//     }
-//     if (minPrice && maxPrice) {
-//       filter.price = { $gte: minPrice, $lte: maxPrice };
-//     } else if (minPrice) {
-//       filter.price = { $gte: minPrice };
-//     } else if (maxPrice) {
-//       filter.price = { $lte: maxPrice };
-//     }
-  
-//     console.log("Filter criteria:", filter);
-  
-//     try {
-//       const products = await Product.find(filter)
-//         .limit(limit * 1)
-//         .skip((page - 1) * limit);
-  
-//       const count = await Product.countDocuments(filter);
-  
-//       console.log("Products found:", products.length);
-  
-//       res.json({
-//         products,
-//         totalPages: Math.ceil(count / limit),
-//         currentPage: page,
-//       });
-//     } catch (error) {
-//       console.error("Server error:", error);
-//       res.status(500).json({ error: "Server error" });
-//     }
-//   });
-
-// module.exports = router;
-
-
+const express = require('express');
+const router = express.Router();
+const Product = require('../Models/Product');
 router.get("/products", async (req, res) => {
   const { page = 1, limit = 10, search = "", category, minPrice, maxPrice, sort } = req.query;
 
@@ -98,3 +53,5 @@ router.get("/products", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+module.exports = router;
