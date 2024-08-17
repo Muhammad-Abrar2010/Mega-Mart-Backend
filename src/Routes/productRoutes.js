@@ -59,10 +59,10 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../Models/Product');
-
 router.get("/products", async (req, res) => {
-  const { page = 1, limit = 10, search = "", category, brand, minPrice, maxPrice, sort } = req.query;
+  console.log('Query parameters:', req.query); // Log query parameters
 
+  const { page = 1, limit = 10, search = "", category, minPrice, maxPrice, brand, sort } = req.query;
   const filter = {};
 
   if (search) {
@@ -71,7 +71,7 @@ router.get("/products", async (req, res) => {
   if (category) {
     filter.category = category;
   }
-  if (brand) {  // Filter by brand
+  if (brand) {
     filter.brand = brand;
   }
   if (minPrice && maxPrice) {
@@ -83,15 +83,17 @@ router.get("/products", async (req, res) => {
   }
 
   let sortCriteria = {};
-
   if (sort === "price_asc") {
     sortCriteria.price = 1;
   } else if (sort === "price_desc") {
     sortCriteria.price = -1;
   } else if (sort === "createdAt_desc") {
     sortCriteria.createdAt = -1;
-  } 
-
+  } else if (sort === "brand_asc") {
+    sortCriteria.brand = 1;
+  } else if (sort === "brand_desc") {
+    sortCriteria.brand = -1;
+  }
   try {
     const products = await Product.find(filter)
       .sort(sortCriteria)
@@ -109,5 +111,6 @@ router.get("/products", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 module.exports = router;
